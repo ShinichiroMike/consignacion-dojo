@@ -1,0 +1,32 @@
+{% extends 'base/base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+{% block content %}
+<h1>Crear Talla</h1>
+  {% if messages %}
+    {% for message in messages %}
+      <p>{{message}}</p>
+    {% endfor %}
+  {% endif %}
+<form method="post">
+  {% csrf_token %}
+  {{ talla_formset.management_form }}
+  {% for talla_form in talla_formset %}
+    <div class="talla-formset">
+      {{ talla_form|crispy }}
+    </div>
+  {% endfor %}
+  <input type="submit" value="save" style="display:block; margin-top:15px">
+</form>
+{% endblock %}
+{% block extrajs %}
+<script src="{% static 'js/django-dynamic-formset/src/jquery.formset.js' %}"></script>
+<script>
+  $('.talla-formset').formset({
+    addText: '+ add talla',
+    deleteText: 'remove',
+    deleteCssClass: 'btn btn-danger delete-row',
+    addCssClass: 'btn btn-primary'
+  });
+</script>
+{% endblock %}

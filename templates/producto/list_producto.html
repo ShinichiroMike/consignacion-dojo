@@ -1,0 +1,32 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+{% if productos %}
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <td>#</td>
+        <td>Nombre</td>
+        <td>Tallaje</td>
+        <td>Color</td>
+      </tr>
+    </thead>
+    <tbody>
+      {% for producto in productos %}
+      <tr>
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" value="{{producto.id}}", name='id'>
+          <td>{{producto.id}}</td>
+          <td>{{producto.nombre|capfirst}}</td>
+          <td>{{producto.color}}</td>
+          <td>
+            <input type="submit" value='delete'>
+          </td>
+        </form>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+  {% endblock %}

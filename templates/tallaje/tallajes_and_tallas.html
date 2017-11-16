@@ -1,0 +1,38 @@
+{% extends 'base/base.html' %}
+{% block content %}
+{% if tallajes %}
+  <ul style='list-style-type: none; padding: 0; width: 20%; float:left'>
+    {% for tallaje in tallajes %}
+    <li class="list-element">
+      <a href="{% url 'tallajes' tallaje.id %}">
+        <strong>{{ tallaje.nombre|capfirst }}</strong>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% if tallas %}
+    <table style="width:80%" class="table table-bordered">
+      <thead>
+        <tr>
+          <td>#</td>
+          <td>Nombre</td>
+          <td>Incremento</td>
+          <td>Tallaje</td>
+        </tr>
+      </thead>
+      <tbody>
+        {% for talla in tallas %}
+        <tr>
+          <td>{{ talla.id }}</td>
+          <td>{{ talla.nombre|capfirst }}</td>
+          <td>{{ talla.incremento }}</td>
+          <td>{{ talla.tallaje.nombre }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <h1>Nothing here</h1>
+  {% endif%}
+  {% endblock %}

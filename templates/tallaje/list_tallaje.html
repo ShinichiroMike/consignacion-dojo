@@ -1,0 +1,32 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<a href="{% url 'tallaje_create' %}" class="btn btn-primary">Nuevo Tallaje</a>
+{% if tallajes %}
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <td>#</td>
+        <td>Nombre</td>
+      </tr>
+      <body>
+        {% for tallaje in tallajes %}
+        <tr>
+          <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" value="{{tallaje.id}}" name="id">
+            <td>{{ tallaje.id }}</td>
+            <td>{{ tallaje.nombre|capfirst }}</td>
+            <td>
+              <input type="submit" value="delete">
+            </td>
+          </form>
+        </tr>
+        {% endfor %}
+      </body>
+    </thead>
+  </table>
+{% else %}
+<h1>Nothing here</h1>
+{% endif %}
+{% endblock %}
