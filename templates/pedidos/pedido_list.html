@@ -1,0 +1,36 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <td>Referencia del pedido</td>
+      <td>Cliente</td>
+      <td>Cantidad de productos pedidos</td>
+      <td>Unidades totales</td>
+      <td>Unidades vendidas</td>
+      <td>Total Pagado</td>
+    </tr>
+    
+  </thead>
+  <tbody>
+    {% if object_list %}
+    {% for pedido in object_list %}
+    <tr>
+      <td><a href="{% url 'pedido_list_detail' pedido.referencia_pedido %}">{{ pedido.referencia_pedido }}</a></td>
+      <td>{{ pedido.cliente }}</td>
+      <td>{{ pedido.dcount }}</td>
+      <td>{{ pedido.unidades_totales }}</td>
+      <td>{{ pedido.unidades_vendidas }}</td>
+      <td>{{ pedido.pagado }}€</td>
+    </tr>
+    {% endfor %}
+    
+    {% else %}
+    <h1>No hay registros de solicitudes</h1>
+    {% endif %}
+  </tbody>
+</table> 
+
+{% endblock%}

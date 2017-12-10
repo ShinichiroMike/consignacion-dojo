@@ -1,0 +1,52 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <td>Nombre de usuario</td>
+      <td>Nombre</td>
+      <td>Apellido</td>
+      <td>Cif</td>
+      <td>Direccion</td>
+      <td>Localidad</td>
+      <td>Provincia</td>
+      <td>Codigo Postal</td>
+      <td>Telefono</td>
+      <td>Telefono movil</td>
+      <td>Fecha de alta</td>
+      <td>Tarifa</td>
+      <td>Deuda Cliente</td>
+      <td>Estado Cliente</td>
+    </tr>
+    
+  </thead>
+  <tbody>
+    {% if object_list %}
+    {% for cliente in object_list %}
+    <tr>
+      <td>{{ cliente.username }}</td>
+      <td>{{ cliente.profile.nombre }}</td>
+      <td>{{ cliente.profile.apellido }}</td>
+      <td>{{ cliente.profile.cif }}</td>
+      <td>{{ cliente.profile.direccion }}</td>
+      <td>{{ cliente.profile.localidad }}</td>
+      <td>{{ cliente.profile.provincia }}</td>
+      <td>{{ cliente.profile.codigo_postal }}</td>
+      <td>{{ cliente.profile.telefono }}</td>
+      <td>{{ cliente.profile.telefono_movil }}</td>
+      <td>{{ cliente.profile.fecha_alta }}</td>
+      <td>{{ cliente.profile.tarifa }}</td>
+      <td>{{ cliente.profile.deuda_cliente }}</td>
+      <td>{{ cliente.profile.estado_cliente }}</td>
+    </tr>
+    {% endfor %}
+    
+    {% else %}
+    <h1>No hay registros de solicitudes</h1>
+    {% endif %}
+  </tbody>
+</table> 
+
+{% endblock%}

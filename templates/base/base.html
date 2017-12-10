@@ -24,8 +24,8 @@
                             <a class="navbar-brand" href="#">Home</a>
                           </div>
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                          {% if user.profile.is_admin %}
                           <ul class="nav navbar-nav">
+                            {% if user.profile.is_admin %}
                               <li class="dropdown">
                                 <a href="{% url 'tallajes_list' %}" role="button" aria-expanded="false">Tallajes</a>
                               </li>
@@ -35,8 +35,17 @@
                               <li class="dropdown">
                                 <a href="{% url 'producto_list' %}" role="button" aria-expanded="false">Productos</a>
                               </li>
+                              <li class="dropdown">
+                                <a href="{% url 'pedido_list' %}" role="button" aria-expanded="false">Pedidos</a>
+                              </li>
+                            {% else %}
+                              <li class="dropdown">
+                                <a href="{% url 'pedido_cliente' %}" role="button" aria-expanded="false">Mis Pedidos</a>
+                              </li>
+                            {% endif %}
+                          }
                           </ul>
-                          {% endif %}
+
                           <ul class="nav navbar-nav navbar-right">
                             {% if user.is_authenticated %}
                               <li>

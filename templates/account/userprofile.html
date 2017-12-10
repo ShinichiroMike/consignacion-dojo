@@ -2,8 +2,8 @@
 {% block content %}
 <ul>
   <li> Username: {{ user.username }}</li>
-  <li> bio: {{ user.profile.bio }}</li>
-  <li> birth date: {{ user.profile.birth_date }}</li>
+  <li> Localidad: {{ user.profile.localidad }}</li>
+  <li> Telefono: {{ user.profile.telefono }}</li>
   <a href="{% url 'accounts:logout' %}">Logout</a>
 </ul>
 | {% endblock %}

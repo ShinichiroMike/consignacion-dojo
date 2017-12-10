@@ -28,3 +28,5 @@ class Producto(models.Model):
   tallaje = models.ForeignKey(Tallaje)
   deleted = models.BooleanField(default=False)
 
+  def __str__(self):
+    return '{}'.format(self.nombre)
