@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Pedido
 from django.views.generic import ListView
 from django.db.models import Count, Sum, Value, CharField, Case, When
@@ -49,7 +50,7 @@ def crearPedido(request):
   productos = Producto.objects.all()
   return render(request, 'pedidos/pedido_form.html', { 'productos': productos })
 
-class PedidoCliente(ListView):
+class PedidoCliente(LoginRequiredMixin, ListView):
   model = Pedido
   template_name = 'pedidos/pedido_cliente.html'
 

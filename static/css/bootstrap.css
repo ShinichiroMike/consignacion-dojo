@@ -7094,3 +7094,19 @@ input[type="checkbox"] {
 .list-element:hover {
   background-color: lightgrey;
 }
+/*tr {
+  transition: background-color .2s
+}*/
+tr:nth-child(even) {background: #fafafa }
+tr:nth-child(odd) {background: #FFF}
+tr:hover {
+  background-color: #008cba;
+  color: white;
+}
+td.delete {
+  color: black 
+}
+.table-title {
+  background-color: #333333 !important;
+  color: white;
+}

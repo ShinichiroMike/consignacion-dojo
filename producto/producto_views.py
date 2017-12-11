@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse_lazy
-from django.contrib.auth.decorators import login_required, user_passes_test
+# from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from .models import Producto
 from filters.views import FilterMixin
@@ -33,7 +34,7 @@ import django_filters
 #   return render(request, 'producto/list_producto.html', context)
 from .filters import ProductoFilter
 
-class ProductoList(FilterMixin, django_filters.views.FilterView):
+class ProductoList(LoginRequiredMixin, FilterMixin, django_filters.views.FilterView):
   model = Producto
   paginate_by = 10
   filterset_class = ProductoFilter
