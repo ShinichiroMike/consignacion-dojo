@@ -1,10 +1,70 @@
 {% extends 'base/base.html' %}
 {% load crispy_forms_tags %}
+{% load widget_tweaks %}
 {% block content %}
-<form method='post'>
+
+
+{% if user_form.errors %}
+    {% for field in user_form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in user_form.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+{% if profile_form.errors %}
+    {% for field in profile_form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in profile_form.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+
+  
+   <div class="well">
+<form method="post">
   {% csrf_token %}
-  {{ user_form|crispy }}
-  {{ profile_form|crispy}}
-  <button type='submit'>Save changes</button>
+
+  {% for hidden_field in form.hidden_fields %}
+    {{ hidden_field }}
+  {% endfor %}
+
+
+
+  {% for field in user_form.visible_fields %}
+    <div class="form-group" style="max-width: 400px; margin-left: auto; margin-right: auto">
+      {{ field.label_tag }}
+      {% render_field field class="form-control" %}
+      {% if field.help_text %}
+        <small class="form-text text-muted">{{ field.help_text }}</small>
+      {% endif %}
+  {% endfor %}  
+
+  {% for field in profile_form.visible_fields %}
+    <div class="form-group" style="max-width: 400px; margin-left: auto; margin-right: auto">
+      {{ field.label_tag }}
+      {% render_field field class="form-control" %}
+      {% if field.help_text %}
+        <small class="form-text text-muted">{{ field.help_text }}</small>
+      {% endif %}
+  {% endfor %}
+
+  <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px">Crear cuenta</button>
+  </div>
+
 </form>
+</div>
 {% endblock %}

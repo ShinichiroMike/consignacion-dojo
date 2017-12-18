@@ -7097,7 +7097,7 @@ input[type="checkbox"] {
 /*tr {
   transition: background-color .2s
 }*/
-tr:nth-child(even) {background: #fafafa }
+tr:nth-child(even) {background: #f8f1f1}
 tr:nth-child(odd) {background: #FFF}
 tr:hover {
   background-color: #008cba;

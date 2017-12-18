@@ -1,9 +1,14 @@
 {% extends 'base/base.html' %}
 {% block content %}
 <ul>
-  <li> Username: {{ user.username }}</li>
+  <li> Nombre de usuario: {{ user.username }}</li>
+  <li> Nombre: {{ user.profile.nombre }}</li>
+  <li> Apellido: {{ user.profile.apellido }}</li>
   <li> Localidad: {{ user.profile.localidad }}</li>
   <li> Telefono: {{ user.profile.telefono }}</li>
+  <li> Telefono movil: {{ user.profile.telefono_movil }}</li>
+  <li> Provincia: {{ user.profile.provincia }}</li>
+  <li> Codigo postal: {{ user.profile.codigo_postal }}</li>
   <a href="{% url 'accounts:logout' %}">Logout</a>
 </ul>
-| {% endblock %}
+{% endblock %}

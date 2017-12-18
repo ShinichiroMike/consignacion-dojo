@@ -1,0 +1,59 @@
+{% extends 'base/base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+<form method="get">
+    <div class="well">
+      <h4 style="margin-top: 0">Filtrar productos</h4>
+      <div class="row">
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.producto.label_tag }}
+          {% render_field filter.form.producto class="form-control" %}
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">
+        <span class="glyphicon glyphicon-search"></span> Buscar
+      </button>
+    </div>
+  </form>
+
+<table class="table table-bordered">
+  <thead>
+    <tr class="table-title">
+      <td><strong>Producto</strong></td>
+      <td><strong>Talla</strong></td>
+      <td><strong>Cantidad pedidos</strong></td>
+      <td><strong>Unidades vendidas</strong></td>
+      <td><strong>Total Pagado</strong></td>
+      <td><strong>actualizar</strong></td>
+    </tr>
+    
+  </thead>
+  <tbody>
+    {% if object_list %}
+    
+    {% for pedido in object_list %}
+    <tr>
+      <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="id" value="{{pedido.id}}">
+        <td>{{ pedido.producto }}</td>
+        <td>{{ pedido.talla }}</td>
+        <td>{{ pedido.unidades }}</td>
+        <td>{{ pedido.unidades_vendidas }}</td>
+        <td>{{ pedido.pagado }}</td>
+        <td class="delete">
+          <input type="text" name="cantidad">
+          <input type="submit"  value="actualizar">
+        </td>
+      </form>
+    </tr>
+    {% endfor %}
+    
+    {% else %}
+    <h1>No hay registros de solicitudes</h1>
+    {% endif %}
+  </tbody>
+</table> 
+
+{% endblock%}

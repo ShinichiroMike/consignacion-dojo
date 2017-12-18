@@ -7,7 +7,7 @@ class ProfileForm(forms.ModelForm):
     #birth_date = forms.DateField(help_text='Required. Format: YYYY-MM-DD')
     class Meta:
         model = Profile
-        fields = ('is_admin', 'nombre', 'apellido', 'cif', 'direccion', 'localidad', 'codigo_postal', 'telefono', 'telefono_movil', 'forma_de_pago', 'numero_de_cuenta', 'deuda_cliente', 'estado_cliente')
+        fields = ('nombre', 'apellido', 'cif', 'direccion', 'localidad', 'codigo_postal', 'telefono', 'telefono_movil', 'forma_de_pago', 'numero_de_cuenta', 'deuda_cliente', 'estado_cliente')
 
 class EditUserForm(forms.ModelForm):
     class Meta:

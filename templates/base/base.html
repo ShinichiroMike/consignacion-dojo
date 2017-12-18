@@ -37,12 +37,26 @@
                               <li class="dropdown">
                                 <a href="{% url 'pedido_list' %}" role="button" aria-expanded="false">Pedidos</a>
                               </li>
+                              <li class="dropdown">
+                                <a href="{% url 'accounts:cliente_list' %}" role="button" aria-expanded="false">Clientes</a>
+                              </li>
+                              {% if request.session.cliente %}
+                                <li class="dropdown" style="background-color: #006687">
+                                  <a href="{% url 'pedido_nuevo' %}" role="button" aria-expanded="false">Continuar con pedido</a>
+                                </li>
+                              {% else %}
+                                <li class="dropdown">
+                                  <a href="{% url 'pedido_nuevo_cliente' %}" role="button" aria-expanded="false">Crear pedido</a>
+                                </li>
+                              {% endif %}
                             {% else %}
                               <li class="dropdown">
                                 <a href="{% url 'pedido_cliente' %}" role="button" aria-expanded="false">Mis Pedidos</a>
                               </li>
+                              <li class="dropdown">
+                                <a href="{% url 'productos_cliente' %}" role="button" aria-expanded="false">Productos</a>
+                              </li>
                             {% endif %}
-                          }
                           </ul>
 
                           <ul class="nav navbar-nav navbar-right">
@@ -51,14 +65,14 @@
                                 <a href="{% url 'accounts:profile' %}">{{ user.username }}</a>
                               </li>
                               <li>
-                                <a href="{% url 'accounts:logout' %}">Logout</a>
+                                <a href="{% url 'accounts:logout' %}">Cerrar sesión</a>
                               </li>
                               {% else %}
                               <li>
-                                <a href="{% url 'accounts:signup' %}">Signup</a>
+                                <a href="{% url 'accounts:signup' %}">Crear cuenta</a>
                               </li>
                               <li>
-                                <a href="{% url 'accounts:login' %}">Login</a>
+                                <a href="{% url 'accounts:login' %}">Iniciar sesión</a>
                               </li>
                               {% endif %}
                           </ul>

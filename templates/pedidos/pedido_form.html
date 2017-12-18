@@ -1,15 +1,98 @@
+
+
 {% extends 'base/base.html' %}
-{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
 {% block content %}
-<form method='post'>
+
+<h1>{{request.session.cliente}}</h1>
+{% if request.session.pedidos %}
+  <h1>pedidos</h1>
+
+{% for pedido in request.session.pedidos %}
+  <p>{{pedido.producto}}, {{pedido.id_producto}}, {{pedido.talla}}, {{pedido.cantidad}}</p>
+{% endfor %}
+<form method="post">
   {% csrf_token %}
-    {% for producto in productos %}
-      <p>
-        {{ producto.nombre }}
-        <input type="checkbox" value="si">
-          <input type="text" name="{{producto.id}}">
-      </p>
-    {% endfor %}
-    <button type='submit'>Realizar pedido</button>
+  <input type="hidden" value="cancelar" name="cancelar">
+  <input type="submit" value="cancelar pedido">
 </form>
-{% endblock %}
+{% endif %}
+<form method="post">
+  {% csrf_token %}
+  <input type="submit" value="realizar pedido">
+</form>
+ <form method="get">
+    <div class="well">
+      <h4 style="margin-top: 0">Filtrar productos</h4>
+      <div class="row">
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.nombre.label_tag }}
+          {% render_field filter.form.nombre class="form-control" %}
+        </div>
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.color.label_tag }}
+          {% render_field filter.form.color class="form-control" %}
+        </div>
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.precio_base.label_tag }}
+          {% render_field filter.form.precio_base class="form-control" %}
+        </div>
+        
+      </div>
+      <button type="submit" class="btn btn-primary">
+        <span class="glyphicon glyphicon-search"></span> Buscar
+      </button>
+    </div>
+  </form>
+
+  <h3>Hay un total de {{ page_obj.paginator.count}} productos disponibles</h3>
+
+  <table class="table table-bordered">
+    <thead>
+      <tr class="table-title">
+        <th>Nombre</th>
+        <th>Color</th>
+        <th>Seleccionar</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for producto in object_list %}
+          <tr>
+            <td>{{producto.nombre|capfirst}}</td>
+            <td>{{producto.color}}</td>
+            <td><a href="{% url 'pedido_elegir_talla' producto.id%}">Seleccionar</a></td>
+          </tr>
+      {% empty %}
+        <tr>
+          <td colspan="5">No hay productos</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+
+{% if page_obj.has_other_pages %}
+  <h4>Mostando {{ page_obj.start_index }} - {{ page_obj.end_index }} de {{ page_obj.paginator.count }} </h4>
+  <ul class="pagination">
+    {% if page_obj.has_previous %}
+      <li><a href="?page={{ page_obj.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">&laquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in page_obj.paginator.page_range %}
+      {% if page_obj.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+        <li><a href="?page={{ i }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if page_obj.has_next %}
+      <li><a href="?page={{ page_obj.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">&raquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+  </ul>
+{% endif %}
+
+  {% endblock %}

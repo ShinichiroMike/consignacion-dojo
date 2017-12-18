@@ -1,0 +1,39 @@
+{% extends 'base/base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+<table class="table table-bordered">
+    <thead>
+      <tr class="table-title">
+        <th>Nombre Producto</th>
+        <th>Talla</th>
+        <th>Cantidad</th>
+      </tr>
+    </thead>
+    <tbody>
+      <form method="post">
+      {% for talla in object_list %}
+        {% if forloop.first %}
+        <input type="hidden" name="producto" value="{{talla.nombre_producto}}">
+        <input type="hidden" name="id_producto" value="{{talla.id_producto}}">
+        {% endif %}
+        <tr>
+          {% csrf_token %}
+          <td>{{talla.nombre_producto|capfirst}}</td>
+          <td>{{talla.nombre|capfirst}}</td>
+          <td class="delete">
+            <input name="{{talla.id}}" type="hidden" value='{{talla.nombre}}'>
+            <input name="{{talla.id}}" type="text" value='0'>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="5">No hay productos</td>
+        </tr>
+      {% endfor %}
+      <input type="submit" value='seguir con el pedido'>
+      </form>
+    </tbody>
+  </table>
+
+{% endblock %}

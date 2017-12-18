@@ -1,13 +1,18 @@
 
 from django.contrib.auth import login, authenticate
+from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from .models import Profile
 from django.forms.models import inlineformset_factory
 from .forms import ProfileForm, EditUserForm
 from django.views.generic import ListView
+from .filters import UserFilter
+from filters.views import FilterMixin
+import django_filters
 
 # vista para cargar el perfil de usuario
 @login_required
@@ -56,6 +61,9 @@ def user_edit(request):
   })
 
 
-class ClienteList(ListView):
+class ClienteList(LoginRequiredMixin, FilterMixin, django_filters.views.FilterView):
   model = User
   template_name = 'account/cliente_list.html'
+  paginate_by = 5
+  filterset_class = UserFilter
+  success_url = reverse_lazy('cliente_list')

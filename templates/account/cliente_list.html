@@ -1,24 +1,41 @@
 {% extends 'base/base.html' %}
-
+{% load widget_tweaks %}
 {% block content %}
+
+<form method="get">
+    <div class="well">
+      <h4 style="margin-top: 0">Filtrar cliente</h4>
+      <div class="row">
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.username.label_tag }}
+          {% render_field filter.form.username class="form-control" %}
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">
+        <span class="glyphicon glyphicon-search"></span> Buscar
+      </button>
+    </div>
+  </form>
+
+<h3>Hay un total de {{ page_obj.paginator.count}} productos disponibles</h3>
 
 <table class="table table-bordered">
   <thead>
-    <tr>
-      <td>Nombre de usuario</td>
-      <td>Nombre</td>
-      <td>Apellido</td>
-      <td>Cif</td>
-      <td>Direccion</td>
-      <td>Localidad</td>
-      <td>Provincia</td>
-      <td>Codigo Postal</td>
-      <td>Telefono</td>
-      <td>Telefono movil</td>
-      <td>Fecha de alta</td>
-      <td>Tarifa</td>
-      <td>Deuda Cliente</td>
-      <td>Estado Cliente</td>
+    <tr class='table-title'>
+      <td><strong>Nombre de usuario</strong></td>
+      <td><strong>Nombre</strong></td>
+      <td><strong>Apellido</strong></td>
+      <td><strong>Cif</strong></td>
+      <td><strong>Direccion</strong></td>
+      <td><strong>Localidad</strong></td>
+      <td><strong>Provincia</strong></td>
+      <td><strong>Codigo Postal</strong></td>
+      <td><strong>Telefono</strong></td>
+      <td><strong>Telefono movil</strong></td>
+      <td><strong>Fecha de alta</strong></td>
+      <td><strong>Tarifa</strong></td>
+      <td><strong>Deuda Cliente</strong></td>
+      <td><strong>Estado Cliente</strong></td>
     </tr>
     
   </thead>
@@ -48,5 +65,28 @@
     {% endif %}
   </tbody>
 </table> 
+
+{% if page_obj.has_other_pages %}
+  <h4>Mostando {{ page_obj.start_index }} - {{ page_obj.end_index }} de {{ page_obj.paginator.count }} </h4>
+  <ul class="pagination">
+    {% if page_obj.has_previous %}
+      <li><a href="?page={{ page_obj.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">&laquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in page_obj.paginator.page_range %}
+      {% if page_obj.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+        <li><a href="?page={{ i }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if page_obj.has_next %}
+      <li><a href="?page={{ page_obj.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">&raquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+  </ul>
+{% endif %}
 
 {% endblock%}
