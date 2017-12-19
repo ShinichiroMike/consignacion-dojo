@@ -7101,6 +7101,7 @@ tr:nth-child(even) {background: #f8f1f1}
 tr:nth-child(odd) {background: #FFF}
 tr:hover {
   background-color: #008cba;
+  opacity: .7;
   color: white;
 }
 td.delete {
@@ -7108,5 +7109,8 @@ td.delete {
 }
 .table-title {
   background-color: #333333 !important;
+  color: white;
+}
+tr:hover>td>a {
   color: white;
 }

@@ -17,8 +17,6 @@
     </div>
   </form>
 
-<h3>Hay un total de {{ page_obj.paginator.count}} productos disponibles</h3>
-
 <table class="table table-bordered">
   <thead>
     <tr class='table-title'>
@@ -54,7 +52,7 @@
       <td>{{ cliente.profile.telefono }}</td>
       <td>{{ cliente.profile.telefono_movil }}</td>
       <td>{{ cliente.profile.fecha_alta }}</td>
-      <td>{{ cliente.profile.tarifa }}</td>
+      <td>{{ cliente.profile.tarifa.nombre }}</td>
       <td>{{ cliente.profile.deuda_cliente }}</td>
       <td>{{ cliente.profile.estado_cliente }}</td>
     </tr>
@@ -67,7 +65,7 @@
 </table> 
 
 {% if page_obj.has_other_pages %}
-  <h4>Mostando {{ page_obj.start_index }} - {{ page_obj.end_index }} de {{ page_obj.paginator.count }} </h4>
+  <h4>Mostando {{ page_obj.start_index }} - {{ page_obj.end_index }} de {{ page_obj.paginator.count }} clientes</h4>
   <ul class="pagination">
     {% if page_obj.has_previous %}
       <li><a href="?page={{ page_obj.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">&laquo;</a></li>

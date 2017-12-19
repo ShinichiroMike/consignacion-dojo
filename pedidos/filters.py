@@ -6,4 +6,4 @@ class PedidoFilter(django_filters.FilterSet):
 
   class Meta:
       model = Pedido
-      fields = ['producto', ]
+      fields = ['producto', 'referencia_pedido', ]

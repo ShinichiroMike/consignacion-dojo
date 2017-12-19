@@ -16,13 +16,14 @@ from .filters import PedidoFilter
 from filters.views import FilterMixin
 import django_filters
 from producto.filters import ProductoFilter
-# from itertools import chain
+
 # Vista de producto con soft delete, vista basada en funcion
 # vista para listar todos los productos que no han sido eliminados
-
-class PedidoList(ListView):
+class PedidoList(LoginRequiredMixin, FilterMixin, django_filters.views.FilterView):
   model = Pedido
   template_name = 'pedidos/pedido_list.html'
+  paginate_by = 10
+  filterset_class = PedidoFilter
 
   def get_queryset(self):
     return Pedido.objects.values('referencia_pedido').annotate(
@@ -37,6 +38,7 @@ class PedidoList(ListView):
         # default=Value('completado'),
         # output_field=CharField(),
         # )
+
 class PedidoDetailList(ListView):
   model = Pedido
   template_name = 'pedidos/pedido_list_detail.html'
@@ -65,6 +67,13 @@ class CrearPedido(LoginRequiredMixin, FilterMixin, django_filters.views.FilterVi
       if 'cliente' in request.session:
         request.session['cliente'] = ''
 
+    # eliminar un producto del pedido en curso
+    elif 'index' in request.POST:
+      index = int(request.POST['index'])
+      del request.session['pedidos'][index]
+      request.session.modified = True
+      return HttpResponseRedirect(reverse_lazy('pedido_nuevo'))
+
     # Realizar el pedido
     else:
       last_pedido = Pedido.objects.latest('referencia_pedido').referencia_pedido + 1
@@ -85,6 +94,8 @@ class CrearPedido(LoginRequiredMixin, FilterMixin, django_filters.views.FilterVi
         request.session['pedidos'] = []
       if 'cliente' in request.session:
         request.session['cliente'] = ''
+      if 'cliente_nombre' in request.session:
+        request.session['cliente_nombre'] = ''
 
     return HttpResponseRedirect(self.success_url)
 
@@ -108,10 +119,13 @@ class ElegirCliente(LoginRequiredMixin, FilterMixin, django_filters.views.Filter
 
   def post(self, request, *args, **kwargs):
     user_id = request.POST.get('id')
-    
+    user_nombre = request.POST.get('nombre')
+
     # añadir cliente a la sesion
     if user_id is not None:
       request.session['cliente'] = user_id
+    if user_nombre is not None:
+      request.session['cliente_nombre'] = user_nombre
 
     # si hay algo en session.pedidos lo limpiamos
     if 'pedidos' in request.session:

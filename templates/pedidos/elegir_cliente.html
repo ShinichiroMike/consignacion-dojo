@@ -44,6 +44,7 @@
       <form method="post">
         {% csrf_token %}
         <input type="hidden" value="{{cliente.id}}", name='id'>
+        <input type="hidden" value="{{cliente.username}}", name='nombre'>
         <td>{{ cliente.id }}</td>
         <td>{{ cliente.username }}</td>
         <td>{{ cliente.profile.nombre }}</td>
