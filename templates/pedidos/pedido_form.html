@@ -19,12 +19,11 @@
       <p style="display:inline-block;margin-top:10px; margin-right:5px">{{pedido.producto}} Talla: {{pedido.talla}}, Cantidad: {{pedido.cantidad}}</p>
     </div>
     {% endfor %}
-
-  {% endif %}
     <form method="post" style="display:inline-block">
       {% csrf_token %}
       <input class="btn btn-success" type="submit" value="realizar pedido">
     </form>
+  {% endif %}
     <form method="post" style="display:inline-block">
       {% csrf_token %}
       <input type="hidden" value="cancelar" name="cancelar">

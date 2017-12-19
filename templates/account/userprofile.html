@@ -1,14 +1,74 @@
 {% extends 'base/base.html' %}
 {% block content %}
-<ul>
-  <li> Nombre de usuario: {{ user.username }}</li>
-  <li> Nombre: {{ user.profile.nombre }}</li>
-  <li> Apellido: {{ user.profile.apellido }}</li>
-  <li> Localidad: {{ user.profile.localidad }}</li>
-  <li> Telefono: {{ user.profile.telefono }}</li>
-  <li> Telefono movil: {{ user.profile.telefono_movil }}</li>
-  <li> Provincia: {{ user.profile.provincia }}</li>
-  <li> Codigo postal: {{ user.profile.codigo_postal }}</li>
-  <a href="{% url 'accounts:logout' %}">Logout</a>
-</ul>
+<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad" >
+
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{user.username}}</h3>
+    </div>
+    <div class="panel-body">
+      <div class="row">
+        <div class=" col-md-9 col-lg-9" style="width: 100%"> 
+          <table class="table table-user-information">
+            <tbody>
+              <tr>
+                <td>Nombre:</td>
+                <td>{{ user.profile.nombre }}</td>
+              </tr>
+              <tr>
+                <td>Apellido:</td>
+                <td>{{ user.profile.apellido }}</td>
+              </tr>
+              <tr>
+                <td>Localidad</td>
+                <td>{{ user.profile.localidad|capfirst }}</td>
+              </tr>
+              <tr>
+                <td>Provincia</td>
+                <td>{{ user.profile.provincia }}</td>
+              </tr>
+              <tr>
+                <td>Codigo postal:</td>
+                <td>{{ user.profile.codigo_postal }}</td>
+              </tr>
+              <tr>
+                <td>Telefono móvil</td>
+                <td>{{ user.profile.telefono_movil }}</td>
+              </tr>
+              <tr>
+                <td>Telefono</td>
+                <td>{{ user.profile.telefono }}</td>
+              </tr>
+                <tr>
+                <td>Home Address</td>
+                <td>Kathmandu,Nepal</td>
+              </tr>
+                <td>Email</td>
+                <td><a href="mailto:info@support.com">info@support.com</a></td>
+              </tr>
+                <td>Phone Number</td>
+                <td>123-4567-890(Landline)<br><br>555-4567-890(Mobile)
+                </td>
+                   
+              </tr>
+             
+            </tbody>
+          </table>
+          
+        </div>
+      </div>
+    </div>
+   <div class="panel-footer">
+          <a data-original-title="Broadcast Message" data-toggle="tooltip" type="button" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-envelope"></i></a>
+          <span class="pull-right">
+              <a href="edit.html" data-original-title="Edit this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-edit"></i></a>
+              <a data-original-title="Remove this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-remove"></i></a>
+          </span>
+      </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}
+
