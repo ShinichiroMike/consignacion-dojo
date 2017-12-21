@@ -13,7 +13,7 @@ class Profile(models.Model):
   user = models.OneToOneField(User, on_delete=models.CASCADE)
   nombre = models.CharField(default='', max_length=250, blank=False)
   apellido = models.CharField(default='', max_length=250, blank=False)
-  cif = models.IntegerField(null=True, blank=True)
+  cif = models.CharField(default='', max_length=250, null=True, blank=True)
   is_admin = models.BooleanField(default=False)
   direccion = models.CharField(default='', max_length=250, blank=True)
   localidad = models.CharField(default='', max_length=250, blank=True)
