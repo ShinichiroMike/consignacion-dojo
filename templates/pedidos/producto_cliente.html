@@ -10,13 +10,20 @@
           {{ filter.form.producto.label_tag }}
           {% render_field filter.form.producto class="form-control" %}
         </div>
-      </div>
-      <button type="submit" class="btn btn-primary">
+      <button type="submit" class="btn btn-primary" style="margin-top: 25px; margin-left: 12px">
         <span class="glyphicon glyphicon-search"></span> Buscar
       </button>
+      </div>
     </div>
   </form>
 
+{% if messages %}
+  <div class="alert alert-warning">
+    {% for message in messages %}
+      <strong>{{ message }}</strong>
+    {% endfor %}
+  </div>
+{% endif %}
 <table class="table table-bordered">
   <thead>
     <tr class="table-title">
@@ -43,7 +50,7 @@
         <td>{{ pedido.unidades_vendidas }}</td>
         <td>{{ pedido.pagado }}</td>
         <td class="delete">
-          <input type="text" name="cantidad">
+          <input style="max-width:100px" type="number" name="cantidad">
           <input type="submit"  value="actualizar">
         </td>
       </form>

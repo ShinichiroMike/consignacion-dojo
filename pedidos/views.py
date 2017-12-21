@@ -16,7 +16,7 @@ from .filters import PedidoFilter
 from filters.views import FilterMixin
 import django_filters
 from producto.filters import ProductoFilter
-
+from django.contrib import messages
 # Vista de producto con soft delete, vista basada en funcion
 # vista para listar todos los productos que no han sido eliminados
 class PedidoList(LoginRequiredMixin, FilterMixin, django_filters.views.FilterView):
@@ -186,6 +186,9 @@ class ProductoClienteList(LoginRequiredMixin, django_filters.views.FilterView, L
     if suma.isnumeric():
       pedido = Pedido.objects.get(id=self.request.POST['id'])
       unidades_vendidas = pedido.unidades_vendidas + int(suma)
-      if unidades_vendidas < pedido.unidades:
+      if unidades_vendidas <= pedido.unidades:
         Pedido.objects.filter(id=self.request.POST['id']).update(unidades_vendidas=unidades_vendidas)
+      else:
+        messages.warning(request, 'La cantidad introducida supera a la cantidad de unidades disponibles. Por favor, introduzca un valor permitido.')
+
     return HttpResponseRedirect(self.success_url)

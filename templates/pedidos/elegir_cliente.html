@@ -6,34 +6,24 @@
       <h4 style="margin-top: 0">Filtrar clientes</h4>
       <div class="row">
         <div class="form-group col-sm-4 col-md-3">
-          {{ filter.form.username.label_tag }}
+          <label for="id_username">Nombre de usuario:</label>
           {% render_field filter.form.username class="form-control" %}
         </div>
-      </div>
-      <button type="submit" class="btn btn-primary">
+      <button type="submit" class="btn btn-primary" style="margin-top: 25px; margin-left: 12px">
         <span class="glyphicon glyphicon-search"></span> Buscar
       </button>
+      </div>
     </div>
   </form>
 
   <table class="table table-bordered">
   <thead>
     <tr class='table-title'>
-      <td><strong>#</strong></td>
       <td><strong>Nombre de usuario</strong></td>
       <td><strong>Nombre</strong></td>
       <td><strong>Apellido</strong></td>
       <td><strong>Cif</strong></td>
-      <td><strong>Direccion</strong></td>
-      <td><strong>Localidad</strong></td>
-      <td><strong>Provincia</strong></td>
-      <td><strong>Codigo Postal</strong></td>
-      <td><strong>Telefono</strong></td>
-      <td><strong>Telefono movil</strong></td>
-      <td><strong>Fecha de alta</strong></td>
-      <td><strong>Tarifa</strong></td>
-      <td><strong>Deuda Cliente</strong></td>
-      <td><strong>Estado Cliente</strong></td>
+      <td><strong>Elegir</strong></td>
     </tr>
     
   </thead>
@@ -45,22 +35,11 @@
         {% csrf_token %}
         <input type="hidden" value="{{cliente.id}}", name='id'>
         <input type="hidden" value="{{cliente.username}}", name='nombre'>
-        <td>{{ cliente.id }}</td>
         <td>{{ cliente.username }}</td>
         <td>{{ cliente.profile.nombre }}</td>
         <td>{{ cliente.profile.apellido }}</td>
         <td>{{ cliente.profile.cif }}</td>
-        <td>{{ cliente.profile.direccion }}</td>
-        <td>{{ cliente.profile.localidad }}</td>
-        <td>{{ cliente.profile.provincia }}</td>
-        <td>{{ cliente.profile.codigo_postal }}</td>
-        <td>{{ cliente.profile.telefono }}</td>
-        <td>{{ cliente.profile.telefono_movil }}</td>
-        <td>{{ cliente.profile.fecha_alta }}</td>
-        <td>{{ cliente.profile.tarifa }}</td>
-        <td>{{ cliente.profile.deuda_cliente }}</td>
-        <td>{{ cliente.profile.estado_cliente }}</td>
-        <td>
+        <td class="delete">
           <input type="submit" value='Elegir'>
         </td>
       </form>
