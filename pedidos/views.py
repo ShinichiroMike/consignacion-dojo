@@ -21,7 +21,7 @@ from django.contrib import messages
 # vista para listar todos los productos que no han sido eliminados
 class PedidoList(LoginRequiredMixin, FilterMixin, django_filters.views.FilterView):
   model = Pedido
-  template_name = 'pedidos/pedido_list.html'
+  template_name = 'pedidos/pedido_all_filter.html'
   paginate_by = 10
   filterset_class = PedidoFilter
 
@@ -39,10 +39,12 @@ class PedidoList(LoginRequiredMixin, FilterMixin, django_filters.views.FilterVie
         # output_field=CharField(),
         # )
 
-class PedidoDetailList(ListView):
+class PedidoDetailList(LoginRequiredMixin, FilterMixin, django_filters.views.FilterView, ListView):
   model = Pedido
   template_name = 'pedidos/pedido_list_detail.html'
-
+  paginate_by = 10
+  filterset_class = PedidoFilter
+  
   def get_queryset(self):
     return Pedido.objects.filter(referencia_pedido=self.kwargs['pk'])
 
@@ -100,13 +102,21 @@ class CrearPedido(LoginRequiredMixin, FilterMixin, django_filters.views.FilterVi
     return HttpResponseRedirect(self.success_url)
 
 # lista para que un cliente pueda ver los pedidos que ha realizado
-class PedidoCliente(LoginRequiredMixin, ListView):
+class PedidoCliente(LoginRequiredMixin, FilterMixin, django_filters.views.FilterView, ListView):
   model = Pedido
-  template_name = 'pedidos/pedidos_cliente.html'
+  template_name = 'pedidos/pedido_user_filter.html'
+  paginate_by = 10
+  filterset_class = PedidoFilter
 
   # filtramos el queryset
   def get_queryset(self):
-    return Pedido.objects.filter(cliente=self.request.user.id)
+    return Pedido.objects.filter(cliente=self.request.user.id).values('referencia_pedido').annotate(
+      unidades_totales=Sum('unidades'), 
+      dcount=Count('referencia_pedido'), 
+      pagado=Sum('pagado'),
+      unidades_vendidas=Sum('unidades_vendidas'),
+      cliente=Concat('cliente__username', Value(''), output_field=CharField())
+    )
 
 # primera vista al crear un pedido, nos lleva a una pantalla de seleccion de cliente
 # para añadirlo a una variable de sesion

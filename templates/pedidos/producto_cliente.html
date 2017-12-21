@@ -9,6 +9,10 @@
         <div class="form-group col-sm-4 col-md-3">
           {{ filter.form.producto.label_tag }}
           {% render_field filter.form.producto class="form-control" %}
+        </div>        
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.color.label_tag }}
+          {% render_field filter.form.color class="form-control" %}
         </div>
       <button type="submit" class="btn btn-primary" style="margin-top: 25px; margin-left: 12px">
         <span class="glyphicon glyphicon-search"></span> Buscar
@@ -28,6 +32,7 @@
   <thead>
     <tr class="table-title">
       <td><strong>Producto</strong></td>
+      <td><strong>Color</strong></td>
       <td><strong>Talla</strong></td>
       <td><strong>Cantidad pedidos</strong></td>
       <td><strong>Unidades vendidas</strong></td>
@@ -45,6 +50,7 @@
         {% csrf_token %}
         <input type="hidden" name="id" value="{{pedido.id}}">
         <td>{{ pedido.producto }}</td>
+        <td>{{ pedido.producto.color }}</td>
         <td>{{ pedido.talla }}</td>
         <td>{{ pedido.unidades }}</td>
         <td>{{ pedido.unidades_vendidas }}</td>
