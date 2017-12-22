@@ -46,7 +46,7 @@
           <form method="post">
             {% csrf_token %}
             <input type="hidden" value="{{producto.id}}", name='id'>
-            <td>{{producto.nombre|capfirst}}</td>
+            <td><a href="{% url 'producto_detail' producto.id %}">{{producto.nombre|capfirst}}</a></td>
             <td>{{producto.color}}</td>
             <td class="delete">
               <input type="submit" value='delete'>

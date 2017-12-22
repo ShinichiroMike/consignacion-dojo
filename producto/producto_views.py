@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from .models import Producto
 from filters.views import FilterMixin
+from django.views.generic import DetailView
 import django_filters
 
 # Vista de producto con soft delete, vista basada en funcion
@@ -50,7 +51,6 @@ class ProductoList(LoginRequiredMixin, FilterMixin, django_filters.views.FilterV
   def get_queryset(self):
     return self.model.objects.filter(deleted=False).order_by('id')
 
-# def ProductoList(request):
-#     producto_list = Producto.objects.all()
-#     producto_filter = ProductoFilter(request.GET, queryset=producto_list)
-#     return render(request, 'producto/filter_producto.html', {'filter': producto_filter})
+class ProductoDetail(LoginRequiredMixin, DetailView):
+  model = Producto
+  template_name = 'producto/producto_detail.html'

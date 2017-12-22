@@ -7,5 +7,8 @@ class Profile(admin.ModelAdmin):
   list_display = ('user', 'is_admin', 'fecha_alta', 'nombre', 'apellido', 'cif', 'direccion', 'localidad', 'codigo_postal', 'telefono', 'telefono_movil', 'forma_de_pago', 'numero_de_cuenta', 'deuda_cliente', 'estado_cliente' )
 
 @admin.register(Tarifa)
-class Profile(admin.ModelAdmin):
-  list_display = ('modificador', )
+class Tarifa(admin.ModelAdmin):
+  list_display = ('nombre', 'descripcion', 'modificador', )
+
+  def __str__(self):
+    return '{}'.format(self.nombre)

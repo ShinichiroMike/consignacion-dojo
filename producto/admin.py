@@ -10,7 +10,7 @@ class Tallaje(admin.ModelAdmin):
 
 @admin.register(Talla)
 class Tallaje(admin.ModelAdmin):
-  list_display = ('id', 'nombre', 'tallaje', 'deleted')
+  list_display = ('id', 'nombre', 'tallaje', 'incremento', 'deleted')
 
 @admin.register(Producto)
 class Producto(admin.ModelAdmin):

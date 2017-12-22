@@ -4,4 +4,4 @@ from .models import Pedido
 
 @admin.register(Pedido)
 class Profile(admin.ModelAdmin):
-  list_display = ('id', 'referencia_pedido', 'cliente', 'producto', 'unidades', 'talla', 'deuda', 'pagado', 'unidades_vendidas', 'fecha_creacion', 'estado')
+  list_display = ('id', 'referencia_pedido', 'cliente', 'producto', 'unidades', 'precio_total_unidad', 'talla', 'deuda', 'pagado', 'unidades_vendidas', 'fecha_creacion', 'estado')

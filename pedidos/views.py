@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Pedido
-from producto.models import Talla
+from producto.models import Talla, Tallaje
 from django.views.generic import ListView
 from django.db.models import Count, Sum, Value, CharField, Case, When
 from django.db.models.functions import Concat
@@ -17,6 +17,7 @@ from filters.views import FilterMixin
 import django_filters
 from producto.filters import ProductoFilter
 from django.contrib import messages
+from decimal import *
 # Vista de producto con soft delete, vista basada en funcion
 # vista para listar todos los productos que no han sido eliminados
 class PedidoList(LoginRequiredMixin, FilterMixin, django_filters.views.FilterView):
@@ -47,6 +48,8 @@ class PedidoDetailList(LoginRequiredMixin, FilterMixin, django_filters.views.Fil
   
   def get_queryset(self):
     return Pedido.objects.filter(referencia_pedido=self.kwargs['pk'])
+
+  # post que acepta un nuevo valor para pagado
 
 # vista para crear el pedido, aqui analizamos los datos de todo el pedido en la sesion
 # y creamos las entradas en la base de datos
@@ -80,15 +83,23 @@ class CrearPedido(LoginRequiredMixin, FilterMixin, django_filters.views.FilterVi
     else:
       last_pedido = Pedido.objects.latest('referencia_pedido').referencia_pedido + 1
       cliente = User.objects.get(id=request.session['cliente'])
+      # traer la tarifa de este cliente
+      tarifa = cliente.profile.tarifa.modificador
       producto = Producto.objects.get(id=request.session['pedidos'][0]['id_producto'])
 
       for pedido in request.session['pedidos']:
+        # traer el incremento de la talla del producto
+        incremento = Talla.objects.get(id=pedido['id_talla']).incremento
+        modificador = round((((incremento/100) - (tarifa/100)) * producto.precio_base), 2)
+        # usar alguna de las variables nuevas en el modelo
+
         Pedido.objects.create(
           referencia_pedido=last_pedido,
           cliente=cliente,
           producto=producto,
           unidades=pedido['cantidad'],
-          talla=pedido['talla']
+          talla=pedido['talla'],
+          precio_total_unidad = producto.precio_base + modificador
           )
 
       # limpiar la sesion
@@ -175,7 +186,7 @@ class ElegirTalla(LoginRequiredMixin, ListView):
         cantidad = request.POST.getlist(e)[1]
         if int(cantidad) > 0:
           talla = request.POST.getlist(e)[0]
-          request.session['pedidos'].append({ 'producto': producto, 'id_producto': id_producto, 'talla': talla, 'cantidad': cantidad })
+          request.session['pedidos'].append({ 'producto': producto, 'id_producto': id_producto, 'talla': talla, 'id_talla': e, 'cantidad': cantidad })
           request.session.modified = True
 
     return HttpResponseRedirect(self.success_url)

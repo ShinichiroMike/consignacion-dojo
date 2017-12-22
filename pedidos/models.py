@@ -14,3 +14,6 @@ class Pedido(models.Model):
   unidades_vendidas = models.IntegerField(default=0)
   fecha_creacion = models.DateTimeField(auto_now_add=True)
   estado = models.CharField(max_length=100, default='pendiente')
+  precio_total_unidad = models.FloatField()
+  # total a pagar
+  # modificador
