@@ -32,7 +32,8 @@ class PedidoList(LoginRequiredMixin, FilterMixin, django_filters.views.FilterVie
       dcount=Count('referencia_pedido'), 
       pagado=Sum('pagado'),
       unidades_vendidas=Sum('unidades_vendidas'),
-      cliente=Concat('cliente__username', Value(''), output_field=CharField())
+      cliente=Concat('cliente__username', Value(''), output_field=CharField()),
+      total_a_pagar=Sum('precio_total_unidad')
     )
         #     estado_general=Case(
         # When(estado='pendiente', then=Value('pendiente')),
@@ -50,6 +51,13 @@ class PedidoDetailList(LoginRequiredMixin, FilterMixin, django_filters.views.Fil
     return Pedido.objects.filter(referencia_pedido=self.kwargs['pk'])
 
   # post que acepta un nuevo valor para pagado
+  def post(self, request, *args, **kwargs):
+    new_value = request.POST['pagado']
+    id = request.POST['id_pedido']
+
+    Pedido.objects.filter(id=id).update(pagado=new_value)
+
+    return HttpResponseRedirect(reverse_lazy('pedido_list'))
 
 # vista para crear el pedido, aqui analizamos los datos de todo el pedido en la sesion
 # y creamos las entradas en la base de datos

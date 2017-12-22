@@ -41,7 +41,16 @@
       <td>{{ pedido.talla }}</td>
       <td>{{ pedido.unidades }}</td>
       <td>{{ pedido.unidades_vendidas }}</td>
-      <td>{{ pedido.pagado }}</td>
+      <td>
+        <span id="pagado_text{{pedido.id}}">{{ pedido.pagado }}€</span>
+        <form method="post" id="pagado_input{{pedido.id}}" class="hidden" style="display:inline-block">
+          {% csrf_token %}
+          <input type="hidden" name="id_pedido" value={{pedido.id}}>
+          <input style="max-width:50px" name="pagado" type="text" value="{{pedido.pagado}}">
+          <input id="pagado_submit" type="submit" value="edit">
+        </form>
+        <a id="edit|{{pedido.id}}" href="#">editar</a>
+      </td>
       <td>{{ pedido.estado }}</td>
     </tr>
     {% endfor %}
@@ -53,3 +62,21 @@
 </table> 
 
 {% endblock%}
+{% block extrajs %}
+<script type="text/javascript">
+  
+$('a[id*="edit"]').click(function(){
+  id = $(this)[0].id.split('|')[1]
+  $('#pagado_input'+id).toggleClass('hidden')
+  $('#pagado_text'+id).toggleClass('hidden')
+  console.log('hola')
+  if($(this).html() == 'x'){
+    $(this).html('editar')
+  }
+  else{
+    $(this).html('x')
+  }
+})
+</script>
+
+{% endblock %}

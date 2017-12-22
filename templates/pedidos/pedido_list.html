@@ -1,7 +1,8 @@
 {% extends 'base/base.html' %}
 {% load widget_tweaks %}
-{% block content %}
 
+{% load mathfilters %}
+{% block content %}
 
   {% block filter %}
   {% endblock %}
@@ -11,9 +12,10 @@
     <tr class='table-title'>
       <td><strong>Referencia del pedido</strong></td>
       <td><strong>Cliente</strong></td>
-      <td><strong>Cantidad de productos pedidos</strong></td>
+      <td><strong>Cantidad prod. pedidos</strong></td>
       <td><strong>Unidades totales</strong></td>
       <td><strong>Unidades vendidas</strong></td>
+      <td><strong>Total a pagar</strong></td>
       <td><strong>Total Pagado</strong></td>
     </tr>
     
@@ -27,6 +29,7 @@
       <td>{{ pedido.dcount }}</td>
       <td>{{ pedido.unidades_totales }}</td>
       <td>{{ pedido.unidades_vendidas }}</td>
+      <td>{{ pedido.total_a_pagar|sub:pedido.pagado }}€</td>
       <td>{{ pedido.pagado }}€</td>
     </tr>
     {% endfor %}
