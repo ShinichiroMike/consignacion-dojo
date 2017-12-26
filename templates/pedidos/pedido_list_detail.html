@@ -41,8 +41,9 @@
       <td>{{ pedido.talla }}</td>
       <td>{{ pedido.unidades }}</td>
       <td>{{ pedido.unidades_vendidas }}</td>
-      <td>
+      <td class="delete">
         <span id="pagado_text{{pedido.id}}">{{ pedido.pagado }}€</span>
+        {% if user.profile.is_admin %}
         <form method="post" id="pagado_input{{pedido.id}}" class="hidden" style="display:inline-block">
           {% csrf_token %}
           <input type="hidden" name="id_pedido" value={{pedido.id}}>
@@ -50,6 +51,7 @@
           <input id="pagado_submit" type="submit" value="edit">
         </form>
         <a id="edit|{{pedido.id}}" href="#">editar</a>
+        {% endif %}
       </td>
       <td>{{ pedido.estado }}</td>
     </tr>

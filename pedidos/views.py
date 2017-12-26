@@ -134,7 +134,8 @@ class PedidoCliente(LoginRequiredMixin, FilterMixin, django_filters.views.Filter
       dcount=Count('referencia_pedido'), 
       pagado=Sum('pagado'),
       unidades_vendidas=Sum('unidades_vendidas'),
-      cliente=Concat('cliente__username', Value(''), output_field=CharField())
+      cliente=Concat('cliente__username', Value(''), output_field=CharField()),
+      total_a_pagar=Sum('precio_total_unidad')
     )
 
 # primera vista al crear un pedido, nos lleva a una pantalla de seleccion de cliente
