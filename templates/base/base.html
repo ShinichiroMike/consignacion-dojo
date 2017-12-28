@@ -62,10 +62,10 @@
                           <ul class="nav navbar-nav navbar-right">
                             {% if user.is_authenticated %}
                               <li>
-                                <a href="{% url 'accounts:profile' %}">{{ user.username }}</a>
+                                <a href="{% url 'accounts:profile' %}"><i style="color:white;margin-right:10px; " class="fa fa-user"></i>{{ user.username }}</a>
                               </li>
                               <li>
-                                <a href="{% url 'accounts:logout' %}">Cerrar sesión</a>
+                                <a href="{% url 'accounts:logout' %}"><i style="color:white;margin-right:10px" class="fa fa-sign-out-alt"></i>Cerrar sesión</a>
                               </li>
                               {% else %}
                               <li>

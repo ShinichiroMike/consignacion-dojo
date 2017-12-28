@@ -1,5 +1,6 @@
 {% extends 'base/base.html' %}
 {% load widget_tweaks %}
+{% load mathfilters %}
 {% block content %}
 
 <form method="get">
@@ -11,22 +12,26 @@
           {% render_field filter.form.producto class="form-control" %}
         </div>
       <button type="submit" class="btn btn-primary" style="margin-top: 25px; margin-left: 12px">
-        <span class="glyphicon glyphicon-search"></span> Buscar
+        <i class="fa fa-search"></i> Buscar
       </button>
       </div>
     </div>
   </form>
-
 <table class="table table-bordered">
   <thead>
     <tr class='table-title'>
       <td><strong>Referencia del pedido</strong></td>
+      {% if user.profile.is_admin %}
       <td><strong>Cliente</strong></td>
+      {% endif %}
       <td><strong>Producto</strong></td>
       <td><strong>Talla</strong></td>
       <td><strong>Cantidad pedidos</strong></td>
+      <td><strong>Precio/ud.</strong></td>
+      <td><strong>Precio total.</strong></td>
       <td><strong>Unidades vendidas</strong></td>
       <td><strong>Total Pagado</strong></td>
+      <td><strong>Total a Pagar</strong></td>
       <td><strong>Estado</strong></td>
     </tr>
     
@@ -36,10 +41,14 @@
     {% for pedido in object_list %}
     <tr>
       <td>{{ pedido.referencia_pedido }}</td>
+      {% if user.profile.is_admin %}
       <td>{{ pedido.cliente }}</td>
+      {% endif %}
       <td>{{ pedido.producto }}</td>
       <td>{{ pedido.talla }}</td>
       <td>{{ pedido.unidades }}</td>
+      <td>{{ pedido.precio_total_unidad }}€</td>
+      <td>{{ pedido.precio_total }}€</td>
       <td>{{ pedido.unidades_vendidas }}</td>
       <td class="delete">
         <span id="pagado_text{{pedido.id}}">{{ pedido.pagado }}€</span>
@@ -47,12 +56,15 @@
         <form method="post" id="pagado_input{{pedido.id}}" class="hidden" style="display:inline-block">
           {% csrf_token %}
           <input type="hidden" name="id_pedido" value={{pedido.id}}>
+          <input type="hidden" name="ref_pedido" value={{pedido.referencia_pedido}}>
           <input style="max-width:50px" name="pagado" type="text" value="{{pedido.pagado}}">
-          <input id="pagado_submit" type="submit" value="edit">
+          <input id="pagado_submit" type="submit" value="Cambiar">
         </form>
-        <a id="edit|{{pedido.id}}" href="#">editar</a>
+        <span> - </span>
+        <a id="edit|{{pedido.id}}" href="#">Cambiar</a>
         {% endif %}
       </td>
+      <td>{{ pedido.precio_total|sub:pedido.pagado }}€</td>
       <td>{{ pedido.estado }}</td>
     </tr>
     {% endfor %}
@@ -67,16 +79,17 @@
 {% block extrajs %}
 <script type="text/javascript">
   
-$('a[id*="edit"]').click(function(){
+$('a[id*="edit"]').click(function(e){
+  e.preventDefault()
   id = $(this)[0].id.split('|')[1]
   $('#pagado_input'+id).toggleClass('hidden')
   $('#pagado_text'+id).toggleClass('hidden')
   console.log('hola')
-  if($(this).html() == 'x'){
-    $(this).html('editar')
+  if($(this).html() == '<i class="fa fa-window-close fa-lg"></i>'){
+    $(this).html('Cambiar')
   }
   else{
-    $(this).html('x')
+    $(this).html('<i class="fa fa-window-close fa-lg"></i>')
   }
 })
 </script>

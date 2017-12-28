@@ -15,7 +15,7 @@
           {% render_field filter.form.color class="form-control" %}
         </div>
       <button type="submit" class="btn btn-primary" style="margin-top: 25px; margin-left: 12px">
-        <span class="glyphicon glyphicon-search"></span> Buscar
+        <i style="margin-right:10px" class="fa fa-search"></i><span>Buscar</span>
       </button>
       </div>
     </div>
@@ -34,6 +34,7 @@
       <td><strong>Producto</strong></td>
       <td><strong>Color</strong></td>
       <td><strong>Talla</strong></td>
+      <td><strong>Precio/ud.</strong></td>
       <td><strong>Cantidad pedidos</strong></td>
       <td><strong>Unidades vendidas</strong></td>
       <td><strong>Total Pagado</strong></td>
@@ -52,6 +53,7 @@
         <td>{{ pedido.producto }}</td>
         <td>{{ pedido.producto.color }}</td>
         <td>{{ pedido.talla }}</td>
+        <td>{{ pedido.precio_total_unidad }}€</td>
         <td>{{ pedido.unidades }}</td>
         <td>{{ pedido.unidades_vendidas }}</td>
         <td>{{ pedido.pagado }}</td>

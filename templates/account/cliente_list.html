@@ -23,13 +23,13 @@
           {% render_field filter.form.cif class="form-control" %}
         </div>
         <button type="submit" class="btn btn-primary" style="margin-top: 25px;margin-left: 12px"">
-          <span class="glyphicon glyphicon-search"></span> Buscar
+          <i style="margin-right:10px" class="fa fa-search"></i><span">Buscar</span>
         </button>
       </div>
     </div>
   </form>
 
-<table class="table table-bordered">
+<table class="table table-bordered" style="display: block;overflow-x: auto;white-space: nowrap;">
   <thead>
     <tr class='table-title'>
       <td><strong>Nombre de usuario</strong></td>
@@ -42,7 +42,7 @@
       <td><strong>Codigo Postal</strong></td>
       <td><strong>Telefono</strong></td>
       <td><strong>Telefono movil</strong></td>
-      <td><strong>Fecha de alta</strong></td>
+      <td style="width:120px"><strong>Fecha de alta</strong></td>
       <td><strong>Tarifa</strong></td>
       <td><strong>Deuda Cliente</strong></td>
       <td><strong>Estado Cliente</strong></td>
@@ -63,7 +63,7 @@
       <td>{{ cliente.profile.codigo_postal }}</td>
       <td>{{ cliente.profile.telefono }}</td>
       <td>{{ cliente.profile.telefono_movil }}</td>
-      <td>{{ cliente.profile.fecha_alta }}</td>
+      <td>{{ cliente.profile.fecha_alta|date:"D d M Y" }}</td>
       <td>{{ cliente.profile.tarifa.nombre }}</td>
       <td>{{ cliente.profile.deuda_cliente }}</td>
       <td>{{ cliente.profile.estado_cliente }}</td>

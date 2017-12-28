@@ -10,13 +10,15 @@
 <table class="table table-bordered">
   <thead>
     <tr class='table-title'>
-      <td><strong>Referencia del pedido</strong></td>
-      <td><strong>Cliente</strong></td>
-      <td><strong>Cantidad prod. pedidos</strong></td>
-      <td><strong>Unidades totales</strong></td>
-      <td><strong>Unidades vendidas</strong></td>
-      <td><strong>Total a pagar</strong></td>
-      <td><strong>Total Pagado</strong></td>
+      <td style="border:none">REFERENCIA DEL PEDIDO</td>
+      {% if user.profile.is_admin %}
+      <td style="border:none">CLIENTE</td>
+      {% endif %}
+      <td style="border:none">CANTIDAD PROD. PEDIDOS</td>
+      <td style="border:none">UNIDADES TOTALES</td>
+      <td style="border:none">UNIDADES VENDIDAS</td>
+      <td style="border:none">TOTAL A PAGAR</td>
+      <td style="border:none">TOTAL PAGADO</td>
     </tr>
     
   </thead>
@@ -25,7 +27,9 @@
     {% for pedido in object_list %}
     <tr>
       <td><a href="{% url 'pedido_list_detail' pedido.referencia_pedido %}">{{ pedido.referencia_pedido }}</a></td>
+      {% if user.profile.is_admin %}
       <td>{{ pedido.cliente }}</td>
+      {% endif %}
       <td>{{ pedido.dcount }}</td>
       <td>{{ pedido.unidades_totales }}</td>
       <td>{{ pedido.unidades_vendidas }}</td>

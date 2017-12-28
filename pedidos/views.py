@@ -33,7 +33,7 @@ class PedidoList(LoginRequiredMixin, FilterMixin, django_filters.views.FilterVie
       pagado=Sum('pagado'),
       unidades_vendidas=Sum('unidades_vendidas'),
       cliente=Concat('cliente__username', Value(''), output_field=CharField()),
-      total_a_pagar=Sum('precio_total_unidad')
+      total_a_pagar=Sum('precio_total')
     )
         #     estado_general=Case(
         # When(estado='pendiente', then=Value('pendiente')),
@@ -54,10 +54,11 @@ class PedidoDetailList(LoginRequiredMixin, FilterMixin, django_filters.views.Fil
   def post(self, request, *args, **kwargs):
     new_value = request.POST['pagado']
     id = request.POST['id_pedido']
+    referencia_pedido = request.POST['ref_pedido']
 
     Pedido.objects.filter(id=id).update(pagado=new_value)
 
-    return HttpResponseRedirect(reverse_lazy('pedido_list'))
+    return HttpResponseRedirect(reverse_lazy('pedido_list_detail', kwargs={'pk':referencia_pedido}))
 
 # vista para crear el pedido, aqui analizamos los datos de todo el pedido en la sesion
 # y creamos las entradas en la base de datos
@@ -100,6 +101,7 @@ class CrearPedido(LoginRequiredMixin, FilterMixin, django_filters.views.FilterVi
         incremento = Talla.objects.get(id=pedido['id_talla']).incremento
         modificador = round((((incremento/100) - (tarifa/100)) * producto.precio_base), 2)
         # usar alguna de las variables nuevas en el modelo
+        precio_total_unidad = producto.precio_base + modificador
 
         Pedido.objects.create(
           referencia_pedido=last_pedido,
@@ -107,7 +109,8 @@ class CrearPedido(LoginRequiredMixin, FilterMixin, django_filters.views.FilterVi
           producto=producto,
           unidades=pedido['cantidad'],
           talla=pedido['talla'],
-          precio_total_unidad = producto.precio_base + modificador
+          precio_total_unidad = precio_total_unidad,
+          precio_total = precio_total_unidad * int(pedido['cantidad'])
           )
 
       # limpiar la sesion
@@ -135,7 +138,7 @@ class PedidoCliente(LoginRequiredMixin, FilterMixin, django_filters.views.Filter
       pagado=Sum('pagado'),
       unidades_vendidas=Sum('unidades_vendidas'),
       cliente=Concat('cliente__username', Value(''), output_field=CharField()),
-      total_a_pagar=Sum('precio_total_unidad')
+      total_a_pagar=Sum('precio_total')
     )
 
 # primera vista al crear un pedido, nos lleva a una pantalla de seleccion de cliente
@@ -209,6 +212,12 @@ class ProductoClienteList(LoginRequiredMixin, django_filters.views.FilterView, L
   success_url = reverse_lazy('productos_cliente')
 
   def get_queryset(self):
+
+    # return Pedido.objects.filter(cliente=self.request.user.id).values('producto__nombre', 'talla', 'producto__color', 'precio_total_unidad').annotate(
+    #   total_pagado=Sum('pagado'),
+    #   unidades=Sum('unidades'),
+    #   unidades_vendidas=Sum('unidades_vendidas')
+    #   )
     return Pedido.objects.filter(cliente=self.request.user.id)
 
   def post(self, request, *args, **kwargs):
