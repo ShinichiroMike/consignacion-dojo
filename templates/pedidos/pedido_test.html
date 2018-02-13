@@ -1,0 +1,79 @@
+{% extends 'base/base.html' %}
+{% load widget_tweaks %}
+{% load mathfilters %}
+{% block content %}
+
+<form method="get">
+    <div class="well">
+      <h4 style="margin-top: 0">Filtrar pedidos</h4>
+      <div class="row">
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.producto.label_tag }}
+          {% render_field filter.form.producto class="form-control" %}
+        </div>
+      <button type="submit" class="btn btn-primary" style="margin-top: 25px; margin-left: 12px">
+        <i class="fa fa-search"></i> Buscar
+      </button>
+      </div>
+    </div>
+  </form>
+<table class="table table-bordered">
+  <thead id="thead">
+      <tr class="table-title"></tr>
+  </thead>
+  <tbody>
+    {% if object_list %}
+    {% for pedido in object_list %}
+    <tr>
+      <td id="p|{{pedido.producto}}" data="hola">{{ pedido.producto }}
+        {% for talla in pedido.tallas %}
+        <input type="hidden" data="{{talla}}">
+        {% endfor %}
+      </td>
+      {% for unidades in pedido.unidades %}
+        <td>{{unidades}}</td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+    
+    {% else %}
+    <h1>No hay registros de solicitudes</h1>
+    {% endif %}
+  </tbody>
+</table> 
+
+
+{% endblock%}
+{% block extrajs %}
+<script type="text/javascript">
+var head = 
+    '<tr class="table-title">' +
+      '<td><strong>Producto</strong></td>' +
+      '<td><strong>S</strong></td>' +
+      '<td><strong>M</strong></td>' +
+      '<td><strong>L</strong></td>' +
+    '</tr>'
+
+$(document).ready(function(){
+  $('thead').append(head)
+})
+
+// $('#pin').click(function(e){
+//     e.preventDefault()
+//     var res = JSON.parse('{{ object_list | escapejs }}')
+//     console.log(res);
+// })
+
+$('td[id*="p"]').click(function(e){
+  e.preventDefault()
+  var td = '<tr class="table-title"><td><strong>Producto</strong></td>'
+  $.each($(this).children(), function(i, val){
+    td += '<td><strong>' + $(val).attr('data') + '</strong></td>'
+  })
+  td += '</tr>'
+  $('#thead').html(td)
+  
+})
+</script>
+
+{% endblock %}

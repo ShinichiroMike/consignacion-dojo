@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Pedido
@@ -18,6 +18,7 @@ import django_filters
 from producto.filters import ProductoFilter
 from django.contrib import messages
 from decimal import *
+import json
 # Vista de producto con soft delete, vista basada en funcion
 # vista para listar todos los productos que no han sido eliminados
 class PedidoList(LoginRequiredMixin, FilterMixin, django_filters.views.FilterView):
@@ -60,6 +61,48 @@ class PedidoDetailList(LoginRequiredMixin, FilterMixin, django_filters.views.Fil
 
     return HttpResponseRedirect(reverse_lazy('pedido_list_detail', kwargs={'pk':referencia_pedido}))
 
+# vista para agrupar los productos del mismo tipo de un pedido
+# y añadir una lista con las tallas
+class PedidoTallajeDinamico(ListView):
+  model = Pedido
+  template_name = 'pedidos/pedido_test.html'
+
+  def get_queryset(self):
+    pedidos =  Pedido.objects.filter(referencia_pedido=self.kwargs['pk']).values('producto__id').annotate(
+      pcount=Count('producto__id'),
+    )
+    res = []
+    for pedido in pedidos:
+      pedido_grouped = Pedido.objects.filter(producto__id=pedido['producto__id'], referencia_pedido=self.kwargs['pk'])
+      tallas = {}
+      unidades = []
+      new_unidades = []
+      new_tallas = []
+      tallaje = Talla.objects.filter(tallaje=pedido_grouped.values('producto__tallaje')[0]['producto__tallaje']).values('nombre')
+
+      for p in pedido_grouped:
+        unidades.append(p.unidades)
+        tallas.update({p.talla: p.unidades})
+      for t in tallaje:
+        if t['nombre'] in tallas:
+          print(t['nombre'], tallas[t['nombre']] )
+          new_unidades.append(tallas[t['nombre']])
+          new_tallas.append(t['nombre'])
+        else:
+          print(t['nombre'], 0)
+          new_unidades.append(0)
+          new_tallas.append(t['nombre'])
+      res.append({ 'producto': pedido_grouped.values('producto__nombre')[0]['producto__nombre'], 'tallas': new_tallas, 'unidades': new_unidades})
+
+    for r in res:
+      print(r)
+
+    # json_string = json.dumps(res)
+    # return json_string
+
+    return res
+
+
 # vista para crear el pedido, aqui analizamos los datos de todo el pedido en la sesion
 # y creamos las entradas en la base de datos
 class CrearPedido(LoginRequiredMixin, FilterMixin, django_filters.views.FilterView):
@@ -94,9 +137,9 @@ class CrearPedido(LoginRequiredMixin, FilterMixin, django_filters.views.FilterVi
       cliente = User.objects.get(id=request.session['cliente'])
       # traer la tarifa de este cliente
       tarifa = cliente.profile.tarifa.modificador
-      producto = Producto.objects.get(id=request.session['pedidos'][0]['id_producto'])
-
+      # producto = Producto.objects.get(id=request.session['pedidos'][0]['id_producto'])
       for pedido in request.session['pedidos']:
+        producto = Producto.objects.get(id=pedido['id_producto'])
         # traer el incremento de la talla del producto
         incremento = Talla.objects.get(id=pedido['id_talla']).incremento
         modificador = round((((incremento/100) - (tarifa/100)) * producto.precio_base), 2)
